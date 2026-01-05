@@ -1,4 +1,4 @@
-FROM n8nio/n8n:latest-alpine
+FROM n8nio/n8n:latest-debian
 LABEL "language"="nodejs"
 LABEL "framework"="n8n"
 USER root
