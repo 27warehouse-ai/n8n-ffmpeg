@@ -1,4 +1,4 @@
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:2.1.5
 LABEL "language"="nodejs"
 LABEL "framework"="n8n"
 USER root
