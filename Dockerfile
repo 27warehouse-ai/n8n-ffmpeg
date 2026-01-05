@@ -1,9 +1,18 @@
-FROM n8nio/n8n:latest-debian
+FROM alpine:latest as builder
+
+RUN apk add --no-cache wget tar xz
+RUN wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+    && tar xvf ffmpeg-release-amd64-static.tar.xz \
+    && mv ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ffmpeg \
+    && mv ffmpeg-*-amd64-static/ffprobe /usr/local/bin/ffprobe \
+    && chmod +x /usr/local/bin/ffmpeg /usr/local/bin/ffprobe
+
+FROM n8nio/n8n:latest
+
 USER root
 
-RUN apt-get update && \
-    apt-get install -y ffmpeg curl && \
-    rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/local/bin/ffmpeg /usr/local/bin/ffmpeg
+COPY --from=builder /usr/local/bin/ffprobe /usr/local/bin/ffprobe
 
 RUN mkdir -p /data/shared && \
     chown -R node:node /data/shared && \
